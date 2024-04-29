@@ -5,20 +5,40 @@
 // It does account for however many of the letter exist in the word. A letter should not be lit up more than once if it doesn't appear in the word more than once
 // If the player guesses the right word, the player wins and the game is over
 const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
-const gameBoard = document.querySelectorAll("input");
+const gameBoard = document.querySelector(".game-board");
+const letterBoxes = document.querySelectorAll("input");
 
 const wordOfTheDay = async () => {
   const word = await fetch(WORD_URL);
   const processedWord = await word.json();
   return processedWord.word;
 }
-
-const userChoice = "slopp";
+let userChoice = "";
 
 const isLetter = (letter) => {
   return /^[a-zA-Z]$/.test(letter);
 }
 
+const storeLetterInputs = (event) => {
+  if (userChoice.length >= 5) {
+    userChoice = "";
+  }
+
+  if (!isLetter(event.key)) {
+    event.preventDefault();
+  }
+
+  for (let i = 0; i < letterBoxes.length; i++) {
+    if (letterBoxes[i].value === "") {
+      letterBoxes[i].value = event.key;
+      userChoice += letterBoxes[i].value;
+      break;
+    }
+  }
+
+
+  console.log(userChoice);
+}
 
 const isSameLetterAndPosition = async () => {
   const dailyWord = await wordOfTheDay();
@@ -45,6 +65,6 @@ const isSameLetterDiffPosition = async () => {
   }
 }
 
-// console.log(wordOfTheDay());
-// isSameLetterAndPosition();
-// isSameLetterDiffPosition();
+for (let i = 0; i < letterBoxes.length; i++) {
+  letterBoxes[i].addEventListener("keydown", storeLetterInputs);
+}
