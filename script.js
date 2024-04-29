@@ -5,7 +5,7 @@
 // It does account for however many of the letter exist in the word. A letter should not be lit up more than once if it doesn't appear in the word more than once
 // If the player guesses the right word, the player wins and the game is over
 const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
-
+const gameBoard = document.querySelectorAll("input");
 
 const wordOfTheDay = async () => {
   const word = await fetch(WORD_URL);
@@ -14,6 +14,11 @@ const wordOfTheDay = async () => {
 }
 
 const userChoice = "slopp";
+
+const isLetter = (letter) => {
+  return /^[a-zA-Z]$/.test(letter);
+}
+
 
 const isSameLetterAndPosition = async () => {
   const dailyWord = await wordOfTheDay();
@@ -40,6 +45,6 @@ const isSameLetterDiffPosition = async () => {
   }
 }
 
-console.log(wordOfTheDay());
-isSameLetterAndPosition();
-isSameLetterDiffPosition();
+// console.log(wordOfTheDay());
+// isSameLetterAndPosition();
+// isSameLetterDiffPosition();
