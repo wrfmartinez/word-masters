@@ -1,3 +1,44 @@
 * {
   box-sizing: border-box;
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+}
+
+.grid-container {
+  display: grid;
+  justify-content: center;
+  height: 800px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.col {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+.box {
+  border: 5px solid rgb(215, 215, 215)
+}
+
+@media (max-width: 920px) {
+  .grid-container {
+  display: grid;
+  justify-content: center;
+  height: 600px;
+}
+
+  .col {
+    width: 80px;
+  }
+}
