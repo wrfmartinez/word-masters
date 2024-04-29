@@ -4,13 +4,21 @@
 // If the player guesses a letter that is in the word but not in the right place, it shown as yellow
 // It does account for however many of the letter exist in the word. A letter should not be lit up more than once if it doesn't appear in the word more than once
 // If the player guesses the right word, the player wins and the game is over
+const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
 
-const word = "crane";
-const userChoice = "brain";
 
-const isSameLetterAndPosition = () => {
-  for (let i = 0; i < word.length; i++) {
-    const wordLetter = word[i];
+const wordOfTheDay = async () => {
+  const word = await fetch(WORD_URL);
+  const processedWord = await word.json();
+  return processedWord.word;
+}
+
+const userChoice = "slopp";
+
+const isSameLetterAndPosition = async () => {
+  const dailyWord = await wordOfTheDay();
+  for (let i = 0; i < dailyWord.length; i++) {
+    const wordLetter = dailyWord[i];
     const userChoiceLetter = userChoice[i];
     // Checks if the letter value within the same index(position) in the word is the same as the letter in the user's choice
     if (wordLetter === userChoiceLetter) {
@@ -19,16 +27,19 @@ const isSameLetterAndPosition = () => {
   }
 }
 
-const isSameLetterDiffPosition = () => {
-  for (let i = 0; i < word.length; i++) {
-    const wordLetter = word[i];
+const isSameLetterDiffPosition = async () => {
+  const dailyWord = await wordOfTheDay();
+  for (let i = 0; i < dailyWord.length; i++) {
+    const wordLetter = dailyWord[i];
     const userChoiceLetter = userChoice[i];
 
     // Checks if the word includes any of the letters within the word in the users choice but is not in the same position as the word
-    if (word.includes(userChoiceLetter) && wordLetter !== userChoiceLetter) {
+    if (dailyWord.includes(userChoiceLetter) && wordLetter !== userChoiceLetter) {
       console.log(i, userChoiceLetter);
     }
   }
 }
 
-noSameLetters();
+console.log(wordOfTheDay());
+isSameLetterAndPosition();
+isSameLetterDiffPosition();
