@@ -19,24 +19,29 @@ const isLetter = (letter) => {
   return /^[a-zA-Z]$/.test(letter);
 }
 
-const storeLetterInputs = (event) => {
-  if (userChoice.length >= 5) {
+const validateUserWord = async () => {
+  if (userChoice.length > 5) {
     userChoice = "";
   }
 
+  if (userChoice.length === 5) {
+    await checkGuess();
+  }
+}
+
+const storeLetterInputs = (event) => {
+  // Prevents keys other than letters from firing
   if (!isLetter(event.key)) {
     event.preventDefault();
   }
-
+  // Checks if a letter box value is empty, if it is it will add the event.key as the value to that letter box
   for (let i = 0; i < letterBoxes.length; i++) {
-    if (letterBoxes[i].value === "") {
+    if (letterBoxes[i].value === "" && isLetter(event.key)) {
       letterBoxes[i].value = event.key;
       userChoice += letterBoxes[i].value;
       break;
     }
   }
-
-
   console.log(userChoice);
 }
 
@@ -45,9 +50,8 @@ const isSameLetterAndPosition = async () => {
   for (let i = 0; i < dailyWord.length; i++) {
     const wordLetter = dailyWord[i];
     const userChoiceLetter = userChoice[i];
-    // Checks if the letter value within the same index(position) in the word is the same as the letter in the user's choice
     if (wordLetter === userChoiceLetter) {
-      console.log(i, wordLetter);
+      letterBoxes[i].style.backgroundColor = "green";
     }
   }
 }
@@ -57,14 +61,25 @@ const isSameLetterDiffPosition = async () => {
   for (let i = 0; i < dailyWord.length; i++) {
     const wordLetter = dailyWord[i];
     const userChoiceLetter = userChoice[i];
-
-    // Checks if the word includes any of the letters within the word in the users choice but is not in the same position as the word
-    if (dailyWord.includes(userChoiceLetter) && wordLetter !== userChoiceLetter) {
-      console.log(i, userChoiceLetter);
+    if (userChoice.includes(wordLetter) && wordLetter !== userChoiceLetter) {
+      letterBoxes[i].style.backgroundColor = "yellow";
     }
   }
 }
 
-for (let i = 0; i < letterBoxes.length; i++) {
-  letterBoxes[i].addEventListener("keydown", storeLetterInputs);
+const checkGuess = async () => {
+  const dailyWord = await wordOfTheDay();
+  if (dailyWord === userChoice) {
+    console.log("You Win!");
+    gameBoard.removeEventListener("keydown", storeLetterInputs);
+    letterBoxes.forEach(box => {
+      box.setAttribute("disabled", "");
+    });
+  } else {
+    isSameLetterAndPosition();
+    isSameLetterDiffPosition();
+  }
 }
+
+gameBoard.addEventListener("keydown", storeLetterInputs);
+document.addEventListener("keydown", validateUserWord);
