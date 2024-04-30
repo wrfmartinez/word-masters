@@ -1,4 +1,5 @@
 const letters = document.querySelectorAll("#letter");
+const gameTitle = document.querySelector(".game-title");
 const loadingDiv = document.querySelector('.loading-indicator');
 const boxRows = document.querySelectorAll('row');
 const ANSWER_LENGTH = 5;
@@ -36,9 +37,10 @@ const init = async () => {
       return;
     }
 
-    // TODO validate the word
-
-    // TODO do all the marking as "correct" "close" or "incorrect"
+    if (currentGuess === word) {
+      gameTitle.textContent = "You Win!"
+      gameTitle.classList.add("winner");
+    }
 
     const userLetters = currentGuess.split("");
     const map = makeMap(wordLetters);
@@ -63,6 +65,7 @@ const init = async () => {
     }
 
     // TODO did they win or lose?
+
 
     boxRows[currentRow++];
     currentGuess = "";
