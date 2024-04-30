@@ -41,18 +41,21 @@ const init = async () => {
     // TODO do all the marking as "correct" "close" or "incorrect"
 
     const userLetters = currentGuess.split("");
+    const map = makeMap(wordLetters);
 
     for (let i = 0; i < ANSWER_LENGTH; i++) {
       // Mark as correct
       if (userLetters[i] === wordLetters[i]) {
         letters[currentRow * ANSWER_LENGTH + i].classList.add("correct");
+        map[userLetters[i]]--;
       }
     }
 
     for (let i = 0; i < ANSWER_LENGTH; i++) {
       if (userLetters[i] === wordLetters[i]) {
         // do nothing
-      } else if (wordLetters.includes(userLetters[i])) {
+      } else if (wordLetters.includes(userLetters[i]) && map[userLetters[i] > 0]) {
+        // Mark as close
         letters[currentRow * ANSWER_LENGTH + i].classList.add("close");
       } else {
         letters[currentRow * ANSWER_LENGTH + i].classList.add("incorrect");
@@ -95,6 +98,20 @@ const isLetter = (letter) => {
 
 const setLoading = (isLoading) => {
   loadingDiv.classList.toggle("show", isLoading);
+}
+
+const makeMap = (array) => {
+  const obj = {};
+  for (let i = 0; i < array.length; i++) {
+    const letter = array[i];
+    if (obj[letter]) {
+      obj[letter]++;
+    } else {
+      obj[letter] = 1;
+    }
+  }
+
+  return obj;
 }
 
 init();
