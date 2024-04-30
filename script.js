@@ -15,10 +15,13 @@ const getWord = async () => {
 const init = async () => {
   let currentGuess = "";
   let currentRow = 0;
+  let isLoading = true;
+
   const word = await getWord();
   const wordLetters = word.split("");
   let done = false;
   setLoading(false);
+  isLoading = false;
 
   const addLetter = (letter) => {
     if (currentGuess.length < ANSWER_LENGTH) {
@@ -36,13 +39,6 @@ const init = async () => {
   const submitGuess = async () => {
     if (currentGuess.length !== ANSWER_LENGTH) {
       // do nothing
-      return;
-    }
-
-    if (currentGuess === word) {
-      gameTitle.textContent = "You Win!"
-      gameTitle.classList.add("winner");
-      done = true;
       return;
     }
 
@@ -69,12 +65,18 @@ const init = async () => {
     }
 
     boxRows[currentRow++];
-    currentGuess = "";
 
-    if (currentRow === ROUNDS) {
+    if (currentGuess === word) {
+      gameTitle.textContent = "You Win!"
+      gameTitle.classList.add("winner");
+      done = true;
+      return;
+    } else if (currentRow === ROUNDS) {
       gameTitle.textContent = `You lose. The word was ${word}`;
       done = true;
     }
+
+    currentGuess = "";
   }
 
   const backspace = () => {
