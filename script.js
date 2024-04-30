@@ -14,6 +14,7 @@ const init = async () => {
   let currentGuess = "";
   let currentRow = 0;
   const word = await getWord();
+  setLoading(false);
 
   const addLetter = (letter) => {
     if (currentGuess.length < ANSWER_LENGTH) {
@@ -70,6 +71,10 @@ const init = async () => {
 
 const isLetter = (letter) => {
   return /^[a-zA-Z]$/.test(letter);
+}
+
+const setLoading = (isLoading) => {
+  loadingDiv.classList.toggle("show", isLoading);
 }
 
 init();

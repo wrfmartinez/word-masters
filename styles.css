@@ -69,6 +69,14 @@ body {
   text-transform: uppercase;
 }
 
+.loading-indicator {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible;
+}
+
 @media (max-width: 920px) {
   .game-board {
   display: grid;
