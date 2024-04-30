@@ -77,6 +77,18 @@ body {
   visibility: visible;
 }
 
+.correct {
+  background-color: rgb(49, 137, 195);
+}
+
+.incorrect {
+  background-color: rgb(177, 177, 177);
+}
+
+.close {
+  background-color: rgb(246, 204, 52);
+}
+
 @media (max-width: 920px) {
   .game-board {
   display: grid;

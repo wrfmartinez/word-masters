@@ -14,6 +14,7 @@ const init = async () => {
   let currentGuess = "";
   let currentRow = 0;
   const word = await getWord();
+  const wordLetters = word.split("");
   setLoading(false);
 
   const addLetter = (letter) => {
@@ -37,7 +38,26 @@ const init = async () => {
 
     // TODO validate the word
 
-    // TODO do all the marking as "correct" "close" or "wrong"
+    // TODO do all the marking as "correct" "close" or "incorrect"
+
+    const userLetters = currentGuess.split("");
+
+    for (let i = 0; i < ANSWER_LENGTH; i++) {
+      // Mark as correct
+      if (userLetters[i] === wordLetters[i]) {
+        letters[currentRow * ANSWER_LENGTH + i].classList.add("correct");
+      }
+    }
+
+    for (let i = 0; i < ANSWER_LENGTH; i++) {
+      if (userLetters[i] === wordLetters[i]) {
+        // do nothing
+      } else if (wordLetters.includes(userLetters[i])) {
+        letters[currentRow * ANSWER_LENGTH + i].classList.add("close");
+      } else {
+        letters[currentRow * ANSWER_LENGTH + i].classList.add("incorrect");
+      }
+    }
 
     // TODO did they win or lose?
 
