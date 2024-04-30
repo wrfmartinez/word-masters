@@ -42,6 +42,25 @@ const init = async () => {
       return;
     }
 
+    isLoading = true;
+    setLoading(true);
+    const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word"
+    const res = await fetch(VALIDATE_WORD_URL, {
+      method: "POST",
+      body: JSON.stringify({ word: currentGuess }),
+    });
+
+    const resObj = await res.json();
+    const validWord = resObj.validWord;
+
+    isLoading = false;
+    setLoading(false);
+
+    if(!validWord) {
+      markInvalidWord();
+      return;
+    }
+
     const userLetters = currentGuess.split("");
     const map = makeMap(wordLetters);
 
@@ -84,6 +103,13 @@ const init = async () => {
     currentGuess = currentGuess = currentGuess.substring(0, currentGuess.length - 1);
     // Clear the last typed letter
     letters[ANSWER_LENGTH * currentRow + currentGuess.length].textContent = "";
+  }
+
+  const markInvalidWord = () => {
+    gameTitle.textContent = "Not a valid word";
+    setTimeout(() => {
+      gameTitle.textContent = "Word Master";
+    }, 2000);
   }
 
   const handleKeyPress = (event) => {
