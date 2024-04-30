@@ -3,6 +3,7 @@ const gameTitle = document.querySelector(".game-title");
 const loadingDiv = document.querySelector('.loading-indicator');
 const boxRows = document.querySelectorAll('row');
 const ANSWER_LENGTH = 5;
+const ROUNDS = 6;
 
 const getWord = async () => {
   const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
@@ -16,6 +17,7 @@ const init = async () => {
   let currentRow = 0;
   const word = await getWord();
   const wordLetters = word.split("");
+  let done = false;
   setLoading(false);
 
   const addLetter = (letter) => {
@@ -40,6 +42,8 @@ const init = async () => {
     if (currentGuess === word) {
       gameTitle.textContent = "You Win!"
       gameTitle.classList.add("winner");
+      done = true;
+      return;
     }
 
     const userLetters = currentGuess.split("");
@@ -64,11 +68,13 @@ const init = async () => {
       }
     }
 
-    // TODO did they win or lose?
-
-
     boxRows[currentRow++];
     currentGuess = "";
+
+    if (currentRow === ROUNDS) {
+      gameTitle.textContent = `You lose. The word was ${word}`;
+      done = true;
+    }
   }
 
   const backspace = () => {
@@ -79,6 +85,11 @@ const init = async () => {
   }
 
   const handleKeyPress = (event) => {
+    if (done || isLoading) {
+      // do nothing
+      return;
+    }
+
     const action = event.key;
 
     if (action === "Enter") {
