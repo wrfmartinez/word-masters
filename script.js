@@ -2,24 +2,25 @@ const letters = document.querySelectorAll("#letter");
 const loadingDiv = document.querySelector('.loading-indicator');
 const boxRows = document.querySelectorAll('row');
 const ANSWER_LENGTH = 5;
-const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
 
-const wordOfTheDay = async () => {
-  const word = await fetch(WORD_URL);
-  const processedWord = word.json();
-  return processedWord;
+const getWord = async () => {
+  const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
+  const res = await fetch(WORD_URL);
+  const resObj = await res.json();
+  return resObj.word;
 }
 
 const init = async () => {
   let currentGuess = "";
   let currentRow = 0;
+  const word = await getWord();
 
   const addLetter = (letter) => {
     if (currentGuess.length < ANSWER_LENGTH) {
       // Add letter to the end
       currentGuess += letter;
     } else {
-      // Replace the last letter
+      // Replace the last letter win a new typed letter
       currentGuess = currentGuess.substring(0, currentGuess.length - 1) + letter;
     }
 
@@ -33,13 +34,25 @@ const init = async () => {
       return;
     }
 
+    // TODO validate the word
+
+    // TODO do all the marking as "correct" "close" or "wrong"
+
+    // TODO did they win or lose?
+
     boxRows[currentRow++];
     currentGuess = "";
   }
 
+  const backspace = () => {
+    // Remove the last letter
+    currentGuess = currentGuess = currentGuess.substring(0, currentGuess.length - 1);
+    // Clear the last typed letter
+    letters[ANSWER_LENGTH * currentRow + currentGuess.length].textContent = "";
+  }
+
   const handleKeyPress = (event) => {
     const action = event.key;
-    console.log(action);
 
     if (action === "Enter") {
       submitGuess();
