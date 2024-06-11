@@ -73,21 +73,20 @@ const init = async () => {
         // do nothing
       } else if (wordLetters.includes(userLetters[i]) && map[userLetters[i] > 0]) {
         // Mark as close
-        letters[currentRow * ANSWER_LENGTH + i].classList.add("close");
+        $("letters").eq(currentRow * ANSWER_LENGTH + i).addClass("close");
       } else {
-        letters[currentRow * ANSWER_LENGTH + i].classList.add("incorrect");
+        $("letters").eq(currentRow * ANSWER_LENGTH + i).addClass("incorrect");
       }
     }
 
-    boxRows[currentRow++];
+    currentRow++;
 
     if (currentGuess === word) {
-      gameTitle.textContent = "You Win!"
-      gameTitle.classList.add("winner");
+      $(".game-title").text("You Win!").addClass("winner");
       done = true;
       return;
     } else if (currentRow === ROUNDS) {
-      gameTitle.textContent = `You lose. The word was ${word}`;
+     $(".game-title").text(`You lose. The word was ${word}`);
       done = true;
     }
 
@@ -98,7 +97,7 @@ const init = async () => {
     // Remove the last letter
     currentGuess = currentGuess = currentGuess.substring(0, currentGuess.length - 1);
     // Clear the last typed letter
-    letters[ANSWER_LENGTH * currentRow + currentGuess.length].textContent = "";
+    $("letters").eq(ANSWER_LENGTH * currentRow + currentGuess.length).text("");
   }
 
   const markInvalidWord = () => {
