@@ -1,7 +1,3 @@
-const letters = document.querySelectorAll("#letter");
-const gameTitle = document.querySelector(".game-title");
-const loadingDiv = document.querySelector('.loading-indicator');
-const boxRows = document.querySelectorAll('row');
 const ANSWER_LENGTH = 5;
 const ROUNDS = 6;
 
@@ -33,7 +29,7 @@ const init = async () => {
     }
 
     // Sets the current row of letters to type in
-    letters[ANSWER_LENGTH * currentRow + currentGuess.length - 1].textContent = letter;
+    $("#letter").eq(ANSWER_LENGTH * currentRow + currentGuess.length - 1).text(letter);
   }
 
   const submitGuess = async () => {
