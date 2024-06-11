@@ -5,7 +5,8 @@ const getWord = async () => {
   const WORD_URL = "https://words.dev-apis.com/word-of-the-day";
   const res = await fetch(WORD_URL);
   const resObj = await res.json();
-  return resObj.word;
+  // Convert fetched word to uppercase
+  return resObj.word.toUpperCase();
 }
 
 const init = async () => {
@@ -20,27 +21,26 @@ const init = async () => {
   isLoading = false;
 
   const addLetter = (letter) => {
+    // Convert letter to uppercase
+    letter = letter.toUpperCase();
     if (currentGuess.length < ANSWER_LENGTH) {
-      // Add letter to the end
       currentGuess += letter;
     } else {
-      // Replace the last letter with a new typed letter
       currentGuess = currentGuess.substring(0, currentGuess.length - 1) + letter;
     }
 
-    // Sets the current row of letters to type in
-    $("#letter").eq(ANSWER_LENGTH * currentRow + currentGuess.length - 1).text(letter);
+    // Ensure we select the correct element
+    $(".letter").eq(ANSWER_LENGTH * currentRow + currentGuess.length - 1).text(letter);
   }
 
   const submitGuess = async () => {
     if (currentGuess.length !== ANSWER_LENGTH) {
-      // do nothing
       return;
     }
 
     isLoading = true;
     setLoading(true);
-    const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word"
+    const VALIDATE_WORD_URL = "https://words.dev-apis.com/validate-word";
     const res = await fetch(VALIDATE_WORD_URL, {
       method: "POST",
       body: JSON.stringify({ word: currentGuess }),
@@ -52,7 +52,7 @@ const init = async () => {
     isLoading = false;
     setLoading(false);
 
-    if(!validWord) {
+    if (!validWord) {
       markInvalidWord();
       return;
     }
@@ -61,21 +61,20 @@ const init = async () => {
     const map = makeMap(wordLetters);
 
     for (let i = 0; i < ANSWER_LENGTH; i++) {
-      // Mark as correct
       if (userLetters[i] === wordLetters[i]) {
-        $("#letter").eq(currentRow * ANSWER_LENGTH + i).addClass("correct");
+        $(".letter").eq(currentRow * ANSWER_LENGTH + i).addClass("correct");
         map[userLetters[i]]--;
       }
     }
 
     for (let i = 0; i < ANSWER_LENGTH; i++) {
       if (userLetters[i] === wordLetters[i]) {
-        // do nothing
+        continue;
       } else if (wordLetters.includes(userLetters[i]) && map[userLetters[i]] > 0) {
-        // Mark as close
-        $("#letter").eq(currentRow * ANSWER_LENGTH + i).addClass("close");
+        $(".letter").eq(currentRow * ANSWER_LENGTH + i).addClass("close");
+        map[userLetters[i]]--;
       } else {
-        $("#letter").eq(currentRow * ANSWER_LENGTH + i).addClass("incorrect");
+        $(".letter").eq(currentRow * ANSWER_LENGTH + i).addClass("incorrect");
       }
     }
 
@@ -94,10 +93,8 @@ const init = async () => {
   }
 
   const backspace = () => {
-    // Remove the last letter
     currentGuess = currentGuess.substring(0, currentGuess.length - 1);
-    // Clear the last typed letter
-    $("#letter").eq(ANSWER_LENGTH * currentRow + currentGuess.length).text("");
+    $(".letter").eq(ANSWER_LENGTH * currentRow + currentGuess.length).text("");
   }
 
   const markInvalidWord = () => {
@@ -109,7 +106,6 @@ const init = async () => {
 
   const handleKeyPress = (event) => {
     if (done || isLoading) {
-      // do nothing
       return;
     }
 
@@ -121,8 +117,6 @@ const init = async () => {
       backspace();
     } else if (isLetter(action)) {
       addLetter(action);
-    } else {
-      // do nothing
     }
   }
 
@@ -139,16 +133,10 @@ const setLoading = (isLoading) => {
 
 const makeMap = (array) => {
   const obj = {};
-  for (let i = 0; i < array.length; i++) {
-    const letter = array[i];
-    if (obj[letter]) {
-      obj[letter]++;
-    } else {
-      obj[letter] = 1;
-    }
-  }
-
+  array.forEach(letter => {
+    obj[letter] = (obj[letter] || 0) + 1;
+  });
   return obj;
 }
 
-$(document).ready(init);
+init();

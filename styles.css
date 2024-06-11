@@ -122,15 +122,15 @@ body {
 }
 
 .correct {
-  background-color: rgb(49, 137, 195);
+  background-color: rgb(49, 195, 95) !important;
 }
 
 .incorrect {
-  background-color: rgb(177, 177, 177);
+  background-color: rgb(177, 177, 177) !important;
 }
 
 .close {
-  background-color: rgb(246, 204, 52);
+  background-color: rgb(246, 204, 52) !important;
 }
 
 @media (max-width: 920px) {
