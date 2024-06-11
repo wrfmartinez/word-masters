@@ -24,7 +24,7 @@ const init = async () => {
       // Add letter to the end
       currentGuess += letter;
     } else {
-      // Replace the last letter win a new typed letter
+      // Replace the last letter with a new typed letter
       currentGuess = currentGuess.substring(0, currentGuess.length - 1) + letter;
     }
 
@@ -63,7 +63,7 @@ const init = async () => {
     for (let i = 0; i < ANSWER_LENGTH; i++) {
       // Mark as correct
       if (userLetters[i] === wordLetters[i]) {
-        letters[currentRow * ANSWER_LENGTH + i].classList.add("correct");
+        $("#letter").eq(currentRow * ANSWER_LENGTH + i).addClass("correct");
         map[userLetters[i]]--;
       }
     }
@@ -71,11 +71,11 @@ const init = async () => {
     for (let i = 0; i < ANSWER_LENGTH; i++) {
       if (userLetters[i] === wordLetters[i]) {
         // do nothing
-      } else if (wordLetters.includes(userLetters[i]) && map[userLetters[i] > 0]) {
+      } else if (wordLetters.includes(userLetters[i]) && map[userLetters[i]] > 0) {
         // Mark as close
-        $("letters").eq(currentRow * ANSWER_LENGTH + i).addClass("close");
+        $("#letter").eq(currentRow * ANSWER_LENGTH + i).addClass("close");
       } else {
-        $("letters").eq(currentRow * ANSWER_LENGTH + i).addClass("incorrect");
+        $("#letter").eq(currentRow * ANSWER_LENGTH + i).addClass("incorrect");
       }
     }
 
@@ -86,7 +86,7 @@ const init = async () => {
       done = true;
       return;
     } else if (currentRow === ROUNDS) {
-     $(".game-title").text(`You lose. The word was ${word}`);
+      $(".game-title").text(`You lose. The word was ${word}`);
       done = true;
     }
 
@@ -95,17 +95,16 @@ const init = async () => {
 
   const backspace = () => {
     // Remove the last letter
-    currentGuess = currentGuess = currentGuess.substring(0, currentGuess.length - 1);
+    currentGuess = currentGuess.substring(0, currentGuess.length - 1);
     // Clear the last typed letter
-    $("letters").eq(ANSWER_LENGTH * currentRow + currentGuess.length).text("");
+    $("#letter").eq(ANSWER_LENGTH * currentRow + currentGuess.length).text("");
   }
 
   const markInvalidWord = () => {
-    const TWO_SECONDS = 2000;
     $(".game-title").text("Not a valid word");
     setTimeout(() => {
       $(".game-title").text("Word Master");
-    }, TWO_SECONDS);
+    }, 2000);
   }
 
   const handleKeyPress = (event) => {
@@ -135,7 +134,7 @@ const isLetter = (letter) => {
 }
 
 const setLoading = (isLoading) => {
-  $(".loading-indicator").toggleClass("show", isLoading);
+  $('.loading-indicator').toggleClass("show", isLoading);
 }
 
 const makeMap = (array) => {
