@@ -101,10 +101,11 @@ const init = async () => {
   }
 
   const markInvalidWord = () => {
-    gameTitle.textContent = "Not a valid word";
+    const TWO_SECONDS = 2000;
+    $(".game-title").text("Not a valid word");
     setTimeout(() => {
-      gameTitle.textContent = "Word Master";
-    }, 2000);
+      $(".game-title").text("Word Master");
+    }, TWO_SECONDS);
   }
 
   const handleKeyPress = (event) => {
@@ -126,7 +127,7 @@ const init = async () => {
     }
   }
 
-  document.addEventListener("keydown", handleKeyPress);
+  $(document).on("keydown", handleKeyPress);
 }
 
 const isLetter = (letter) => {
@@ -134,7 +135,7 @@ const isLetter = (letter) => {
 }
 
 const setLoading = (isLoading) => {
-  loadingDiv.classList.toggle("show", isLoading);
+  $(".loading-indicator").toggleClass("show", isLoading);
 }
 
 const makeMap = (array) => {
@@ -151,4 +152,4 @@ const makeMap = (array) => {
   return obj;
 }
 
-init();
+$(document).ready(init);
